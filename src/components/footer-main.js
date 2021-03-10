@@ -1,9 +1,9 @@
 import React from 'react';
 
-const FooterMain = ({ ClearAllHandler, itemCount, selectHandler, selected }) => {
+const FooterMain = ({ todolist, ClearAllHandler, itemCount, selectHandler, selected }) => {
 
     return (
-        <footer className="footer">
+        <footer className={todolist.length > 0 ? "footer" : "footer hidden"}>
             <span className="todo-count">{itemCount} item left</span>
             <ul className="filters">
                 <li>

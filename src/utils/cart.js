@@ -40,12 +40,12 @@ export const onUpdateItem = (state, payload) => {
 export const onRemoveItem = (state, payload) => {
     return {
         ...state,
-        cartList: state.cartList.filter((item) => item.id !== payload.id),
+        cartList: state.cartList.filter((item) => item.id !== payload),
     };
 }
-export const onRemoveAll = (state) => {
+export const onRemoveAllCompleted = (state) => {
     return {
         ...state,
-        cartList: [],
+        cartList: state.cartList.filter((item) => !item.completed),
     };
 }

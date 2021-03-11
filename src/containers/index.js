@@ -72,6 +72,7 @@ const MainApp = () => {
                     completeEditHandler={CompleteEditHandler}
                 />
                 <FooterMain
+                    completedData={state.cartList.filter(item => item.completed)}
                     selectHandler={selectHandler}
                     itemCount={FilterDataSelectionType().length}
                     selected={selected}

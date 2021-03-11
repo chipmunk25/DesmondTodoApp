@@ -7,8 +7,8 @@ import { onAddItem, onUpdateCheckAll, onUpdateItem, onItemExist, onRemoveAllComp
 const MainApp = () => {
     const [state, setState] = useState({
         cartList: [
-            { id: 1, title: "des", completed: false },
-            { id: 2, title: "gigi", completed: false },
+            { id: 1, title: "des", completed: false, editing: false },
+            { id: 2, title: "gigi", completed: false, editing: false },
         ]
     })
     const toggleHandler = (e, id) => {
@@ -17,12 +17,27 @@ const MainApp = () => {
         const updated = onUpdateItem(state, { ...getdata, completed })
         setState(updated)
     }
+    const toggleEditHandler = (id) => {
+        const getdata = onItemExist(state, id)
+        const updated = onUpdateItem(state, { ...getdata, editing: true })
+        setState(updated)
+    }
+
     const toggleAllHandler = (e) => {
         const completed = e.target.checked
         const updatedall = onUpdateCheckAll(state, completed)
         setState(updatedall)
     }
 
+    const CompleteEdit = (event, id) => {
+        if (event.key === 'Enter' || event.key === 'Escape') {
+            const getdata = onItemExist(state, id)
+            const updated = onUpdateItem(state, { ...getdata, title: event.target.value, editing: false })
+            setState(updated)
+            event.preventDefault()
+            event.stopPropagation()
+        }
+    }
     const [selected, setSelected] = useState("all")
     const selectHandler = (value) => setSelected(value)
     const ClearAllHandler = () => setState(onRemoveAllCompleted(state))
@@ -44,6 +59,8 @@ const MainApp = () => {
                     toggleAllHandler={toggleAllHandler}
                     toggleHandler={toggleHandler}
                     removeItem={RemoveItemHandler}
+                    setToggleEdit={toggleEditHandler}
+                    CompleteEdit={CompleteEdit}
                 />
                 <FooterMain
                     selectHandler={selectHandler}

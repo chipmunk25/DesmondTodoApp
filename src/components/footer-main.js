@@ -1,22 +1,22 @@
 import React from 'react';
 
-const FooterMain = ({ todolist, ClearAllHandler, itemCount, selectHandler, selected }) => {
+const FooterMain = ({ todolist, clearAllHandler, itemCount, selectHandler, selected }) => {
 
     return (
         <footer className={todolist.length > 0 ? "footer" : "footer hidden"}>
             <span className="todo-count">{itemCount} item left</span>
             <ul className="filters">
                 <li>
-                    <a onClick={() => selectHandler("all")} className={selected === "all" ? "selected" : ""}>All</a>
+                    <span onClick={() => selectHandler("all")} className={selected === "all" ? "selected" : ""}>All</span>
                 </li>
                 <li>
-                    <a onClick={() => selectHandler("active")} className={selected === "active" ? "selected" : ""} >Active</a>
+                    <span onClick={() => selectHandler("active")} className={selected === "active" ? "selected" : ""} >Active</span>
                 </li>
                 <li>
-                    <a onClick={() => selectHandler("completed")} className={selected === "completed" ? "selected" : ""} >Completed</a>
+                    <span onClick={() => selectHandler("completed")} className={selected === "completed" ? "selected" : ""} >Completed</span>
                 </li>
             </ul>
-            <button className="clear-completed" onClick={ClearAllHandler}>Clear completed</button>
+            <button className="clear-completed" onClick={clearAllHandler}>Clear completed</button>
         </footer>
     );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 
-const InputComponent = ({ placeholder }) => {
+const InputComponent = ({ placeholder, onKeyDown }) => {
     return (
         <div>
-            <input className="new-todo" placeholder={placeholder} />
+            <input className="new-todo" placeholder={placeholder} onKeyDown={onKeyDown} />
         </div>
     );
 };

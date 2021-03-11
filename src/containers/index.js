@@ -6,30 +6,28 @@ import FooterMain from "../components/footer-main"
 import { onAddItem, onUpdateCheckAll, onUpdateItem, onItemExist, onRemoveAllCompleted, onRemoveItem } from "../utils/cart"
 const MainApp = () => {
     const [state, setState] = useState({
-        cartList: [
-            { id: 1, title: "des", completed: false, editing: false },
-            { id: 2, title: "gigi", completed: false, editing: false },
-        ]
+        cartList: []
     })
-    const toggleHandler = (e, id) => {
+    const [selected, setSelected] = useState("all")
+
+    const ToggleCheckHandler = (e, id) => {
         const getdata = onItemExist(state, id)
         const completed = e.target.checked
         const updated = onUpdateItem(state, { ...getdata, completed })
         setState(updated)
     }
-    const toggleEditHandler = (id) => {
+    const ToggleAllCheckHandler = (e) => {
+        const completed = e.target.checked
+        const updatedall = onUpdateCheckAll(state, completed)
+        setState(updatedall)
+    }
+    const ToggleEditHandler = (id) => {
         const getdata = onItemExist(state, id)
         const updated = onUpdateItem(state, { ...getdata, editing: true })
         setState(updated)
     }
 
-    const toggleAllHandler = (e) => {
-        const completed = e.target.checked
-        const updatedall = onUpdateCheckAll(state, completed)
-        setState(updatedall)
-    }
-
-    const CompleteEdit = (event, id) => {
+    const CompleteEditHandler = (event, id) => {
         if (event.key === 'Enter' || event.key === 'Escape') {
             const getdata = onItemExist(state, id)
             const updated = onUpdateItem(state, { ...getdata, title: event.target.value, editing: false })
@@ -38,11 +36,21 @@ const MainApp = () => {
             event.stopPropagation()
         }
     }
-    const [selected, setSelected] = useState("all")
+
+    const AddNewItemHandler = (event) => {
+        if (event.key === 'Enter') {
+            const id = state.cartList.length + 1
+            const added = onAddItem(state, { id, title: event.target.value, completed: false, editing: false })
+            setState(added)
+            event.stopPropagation()
+            event.target.value = ""
+        }
+    }
+
     const selectHandler = (value) => setSelected(value)
     const ClearAllHandler = () => setState(onRemoveAllCompleted(state))
     const RemoveItemHandler = (id) => setState(onRemoveItem(state, id))
-    const FilterTypeList = () => {
+    const FilterDataSelectionType = () => {
         if (selected === "active") {
             return state.cartList.filter(item => !item.completed)
         } else if (selected === "completed") {
@@ -51,22 +59,23 @@ const MainApp = () => {
             return state.cartList
         }
     }
+
     return (
         <div>
             <section className="todoapp">
-                <Header />
-                <MainBody todolist={FilterTypeList()}
-                    toggleAllHandler={toggleAllHandler}
-                    toggleHandler={toggleHandler}
-                    removeItem={RemoveItemHandler}
-                    setToggleEdit={toggleEditHandler}
-                    CompleteEdit={CompleteEdit}
+                <Header addNewItemHandler={AddNewItemHandler} />
+                <MainBody todolist={FilterDataSelectionType()}
+                    toggleAllCheckHandler={ToggleAllCheckHandler}
+                    toggleCheckHandler={ToggleCheckHandler}
+                    removeItemHandler={RemoveItemHandler}
+                    toggleEditHandler={ToggleEditHandler}
+                    completeEditHandler={CompleteEditHandler}
                 />
                 <FooterMain
                     selectHandler={selectHandler}
-                    itemCount={FilterTypeList().length}
+                    itemCount={FilterDataSelectionType().length}
                     selected={selected}
-                    ClearAllHandler={ClearAllHandler}
+                    clearAllHandler={ClearAllHandler}
                     todolist={state.cartList}
                 />
             </section>
